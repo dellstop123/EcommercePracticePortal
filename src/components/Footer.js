@@ -1,13 +1,18 @@
+import Link from 'next/link';
+
 export default function Footer() {
   return (
     <footer className="bg-dark text-light py-5 mt-5">
       <div className="container">
         <div className="row">
-          {/* Company Info */}
-          <div className="col-lg-4 col-md-6 mb-4">
-            <h5 className="mb-3">FashionHub</h5>
+          <div className="col-lg-4 mb-4">
+            <h5 className="mb-3">
+              <i className="bi bi-shop me-2"></i>
+              E-commerce Practice Portal
+            </h5>
             <p className="text-muted">
-              Your one-stop destination for trendy fashion items. Quality products at affordable prices.
+              Your one-stop destination for all your shopping needs. 
+              Quality products, competitive prices, and excellent service.
             </p>
             <div className="d-flex gap-3">
               <a href="#" className="text-light">
@@ -24,82 +29,94 @@ export default function Footer() {
               </a>
             </div>
           </div>
-
-          {/* Quick Links */}
+          
           <div className="col-lg-2 col-md-6 mb-4">
             <h6 className="mb-3">Quick Links</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
-                <a href="/" className="text-muted text-decoration-none">Home</a>
+                <Link href="/" className="text-muted text-decoration-none">
+                  Home
+                </Link>
               </li>
               <li className="mb-2">
-                <a href="/products" className="text-muted text-decoration-none">Products</a>
+                <Link href="/products" className="text-muted text-decoration-none">
+                  Products
+                </Link>
               </li>
               <li className="mb-2">
-                <a href="/categories" className="text-muted text-decoration-none">Categories</a>
+                <Link href="/categories" className="text-muted text-decoration-none">
+                  Categories
+                </Link>
               </li>
               <li className="mb-2">
-                <a href="/about" className="text-muted text-decoration-none">About Us</a>
-              </li>
-              <li className="mb-2">
-                <a href="/contact" className="text-muted text-decoration-none">Contact</a>
+                <Link href="/cart" className="text-muted text-decoration-none">
+                  Cart
+                </Link>
               </li>
             </ul>
           </div>
-
-          {/* Customer Service */}
+          
           <div className="col-lg-2 col-md-6 mb-4">
-            <h6 className="mb-3">Customer Service</h6>
+            <h6 className="mb-3">Categories</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
-                <a href="/help" className="text-muted text-decoration-none">Help Center</a>
+                <Link href="/categories/men" className="text-muted text-decoration-none">
+                  Men
+                </Link>
               </li>
               <li className="mb-2">
-                <a href="/shipping" className="text-muted text-decoration-none">Shipping Info</a>
+                <Link href="/categories/women" className="text-muted text-decoration-none">
+                  Women
+                </Link>
               </li>
               <li className="mb-2">
-                <a href="/returns" className="text-muted text-decoration-none">Returns</a>
-              </li>
-              <li className="mb-2">
-                <a href="/size-guide" className="text-muted text-decoration-none">Size Guide</a>
-              </li>
-              <li className="mb-2">
-                <a href="/faq" className="text-muted text-decoration-none">FAQ</a>
+                <Link href="/categories/kids" className="text-muted text-decoration-none">
+                  Kids
+                </Link>
               </li>
             </ul>
           </div>
-
-          {/* Newsletter */}
-          <div className="col-lg-4 col-md-6 mb-4">
-            <h6 className="mb-3">Newsletter</h6>
-            <p className="text-muted mb-3">
-              Subscribe to get special offers and updates.
-            </p>
-            <form className="d-flex">
-              <input
-                type="email"
-                className="form-control me-2"
-                placeholder="Enter your email"
-              />
-              <button type="submit" className="btn btn-primary">
-                Subscribe
-              </button>
-            </form>
+          
+          <div className="col-lg-4 mb-4">
+            <h6 className="mb-3">Contact Info</h6>
+            <div className="mb-3">
+              <i className="bi bi-geo-alt me-2"></i>
+              <span className="text-muted">123 Shopping St, E-commerce City, EC 12345</span>
+            </div>
+            <div className="mb-3">
+              <i className="bi bi-telephone me-2"></i>
+              <span className="text-muted">+1 (555) 123-4567</span>
+            </div>
+            <div className="mb-3">
+              <i className="bi bi-envelope me-2"></i>
+              <span className="text-muted">support@ecommercepractice.com</span>
+            </div>
+            <div className="mb-3">
+              <i className="bi bi-clock me-2"></i>
+              <span className="text-muted">Mon-Fri: 9AM-6PM, Sat: 10AM-4PM</span>
+            </div>
           </div>
         </div>
-
-        {/* Bottom Bar */}
+        
         <hr className="my-4" />
+        
         <div className="row align-items-center">
           <div className="col-md-6">
-            <p className="text-muted mb-0">
-              © 2024 FashionHub. All rights reserved.
+            <p className="mb-0 text-muted">
+              © 2024 E-commerce Practice Portal. All rights reserved.
             </p>
           </div>
           <div className="col-md-6 text-md-end">
             <div className="d-flex gap-3 justify-content-md-end">
-              <a href="/privacy" className="text-muted text-decoration-none">Privacy Policy</a>
-              <a href="/terms" className="text-muted text-decoration-none">Terms of Service</a>
+              <Link href="/privacy" className="text-muted text-decoration-none small">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="text-muted text-decoration-none small">
+                Terms of Service
+              </Link>
+              <Link href="/shipping" className="text-muted text-decoration-none small">
+                Shipping Info
+              </Link>
             </div>
           </div>
         </div>

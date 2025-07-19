@@ -1,232 +1,140 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import ProductCard from '@/components/ProductCard';
-import { products, categories, brands } from '@/data/products';
+import { products } from '@/data/products';
 
 export default function CategoriesPage() {
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedBrand, setSelectedBrand] = useState('');
-  const [sortBy, setSortBy] = useState('name');
+  const router = useRouter();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Get products for selected category
-  const filteredProducts = selectedCategory 
-    ? products.filter(product => product.category === selectedCategory)
-    : products;
+  useEffect(() => {
+    // Extract unique categories from products
+    const uniqueCategories = [...new Set(products.map(product => product.category))];
+    
+    // Create category objects with counts
+    const categoryData = uniqueCategories.map(category => {
+      const count = products.filter(product => product.category === category).length;
+      return {
+        name: category,
+        count: count,
+        id: category.toLowerCase().replace(/\s+/g, '-')
+      };
+    });
 
-  // Further filter by brand if selected
-  const finalProducts = selectedBrand
-    ? filteredProducts.filter(product => product.brand === selectedBrand)
-    : filteredProducts;
+    setCategories(categoryData);
+    setLoading(false);
+  }, []);
 
-  // Sort products
-  const sortedProducts = [...finalProducts].sort((a, b) => {
-    switch (sortBy) {
-      case 'price-low':
-        return a.price - b.price;
-      case 'price-high':
-        return b.price - a.price;
-      case 'rating':
-        return b.rating - a.rating;
-      case 'name':
+  const getCategoryIcon = (categoryName) => {
+    switch (categoryName.toLowerCase()) {
+      case 'men':
+        return 'bi-person';
+      case 'women':
+        return 'bi-person-heart';
+      case 'kids':
+        return 'bi-emoji-smile';
       default:
-        return a.name.localeCompare(b.name);
+        return 'bi-tshirt';
     }
-  });
-
-  const clearFilters = () => {
-    setSelectedCategory('');
-    setSelectedBrand('');
-    setSortBy('name');
   };
 
+  const getCategoryDescription = (categoryName) => {
+    switch (categoryName.toLowerCase()) {
+      case 'men':
+        return "Discover our collection of men's clothing and accessories";
+      case 'women':
+        return "Explore our stylish women's fashion and accessories";
+      case 'kids':
+        return "Find adorable and comfortable clothing for kids";
+      default:
+        return `Browse our ${categoryName.toLowerCase()} collection`;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mt-5">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mt-4">
+    <div className="container mt-5">
       {/* Header */}
-      <div className="row mb-4">
-        <div className="col-12">
-          <h1 className="fw-bold">Browse Categories</h1>
-          <p className="text-muted">Explore our products by category</p>
+      <div className="row mb-5">
+        <div className="col-12 text-center">
+          <h1 className="fw-bold mb-3">
+            <i className="bi bi-grid-3x3-gap me-2"></i>
+            Shop by Category
+          </h1>
+          <p className="text-muted fs-5">
+            Explore our wide range of products organized by category
+          </p>
         </div>
       </div>
 
+      {/* Categories Grid */}
       <div className="row">
-        {/* Categories Sidebar */}
-        <div className="col-lg-3 mb-4">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="mb-0">Categories</h5>
-            </div>
-            <div className="card-body">
-              <div className="list-group list-group-flush">
-                <button
-                  className={`list-group-item list-group-item-action ${!selectedCategory ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('')}
+        {categories.map((category) => (
+          <div key={category.id} className="col-lg-4 col-md-6 mb-4">
+            <div className="card h-100 category-card shadow-sm hover-lift">
+              <div className="card-body text-center p-4">
+                <div className="mb-3">
+                  <div className="category-icon-wrapper">
+                    <i className={`bi ${getCategoryIcon(category.name)} display-4 text-primary`}></i>
+                  </div>
+                </div>
+                <h4 className="card-title fw-bold mb-2">{category.name}</h4>
+                <p className="text-muted mb-3">
+                  {getCategoryDescription(category.name)}
+                </p>
+                <div className="mb-3">
+                  <span className="badge bg-primary fs-6">
+                    {category.count} products
+                  </span>
+                </div>
+                <Link 
+                  href={`/categories/${category.name.toLowerCase()}`}
+                  className="btn btn-primary btn-lg w-100"
                 >
-                  All Categories ({products.length})
-                </button>
-                {categories.map((category) => (
-                  <button
-                    key={category.id}
-                    className={`list-group-item list-group-item-action ${selectedCategory === category.name ? 'active' : ''}`}
-                    onClick={() => setSelectedCategory(category.name)}
-                  >
-                    {category.name} ({category.count})
-                  </button>
-                ))}
+                  <i className="bi bi-arrow-right me-2"></i>
+                  Browse {category.name}
+                </Link>
               </div>
             </div>
           </div>
+        ))}
+      </div>
 
-          {/* Brands Filter */}
-          <div className="card mt-3">
-            <div className="card-header">
-              <h6 className="mb-0">Brands</h6>
-            </div>
-            <div className="card-body">
-              <div className="list-group list-group-flush">
-                <button
-                  className={`list-group-item list-group-item-action ${!selectedBrand ? 'active' : ''}`}
-                  onClick={() => setSelectedBrand('')}
-                >
-                  All Brands
-                </button>
-                {brands.map((brand) => (
-                  <button
-                    key={brand.id}
-                    className={`list-group-item list-group-item-action ${selectedBrand === brand.name ? 'active' : ''}`}
-                    onClick={() => setSelectedBrand(brand.name)}
-                  >
-                    {brand.name} ({brand.count})
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Clear Filters */}
-          {(selectedCategory || selectedBrand) && (
-            <div className="mt-3">
-              <button
-                className="btn btn-outline-secondary w-100"
-                onClick={clearFilters}
-              >
-                Clear Filters
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Products Section */}
-        <div className="col-lg-9">
-          {/* Filters and Sort */}
-          <div className="row mb-4">
-            <div className="col-md-6">
-              <h5>
-                {selectedCategory ? `${selectedCategory} Products` : 'All Products'}
-                {selectedBrand && ` - ${selectedBrand}`}
-              </h5>
-              <p className="text-muted">
-                Showing {sortedProducts.length} of {products.length} products
+      {/* Featured Products Section */}
+      <div className="row mt-5">
+        <div className="col-12">
+          <div className="card bg-light">
+            <div className="card-body text-center py-5">
+              <h3 className="mb-3">Can&apos;t find what you&apos;re looking for?</h3>
+              <p className="text-muted mb-4">
+                Browse our complete product catalog or use our search feature to find exactly what you need.
               </p>
-            </div>
-            <div className="col-md-6 text-md-end">
-              <select
-                className="form-select d-inline-block w-auto"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <option value="name">Sort by Name</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Sort by Rating</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Category Cards */}
-          {!selectedCategory && (
-            <div className="row mb-4">
-              {categories.map((category) => {
-                const categoryProducts = products.filter(p => p.category === category.name);
-                return (
-                  <div key={category.id} className="col-md-6 col-lg-4 mb-4">
-                    <div className="card h-100 product-card">
-                      <div className="card-body text-center">
-                        <div className="mb-3">
-                          <i className="bi bi-tshirt fs-1 text-primary"></i>
-                        </div>
-                        <h5 className="card-title">{category.name}</h5>
-                        <p className="text-muted">{category.count} products</p>
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => setSelectedCategory(category.name)}
-                        >
-                          Browse {category.name}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Products Grid */}
-          {selectedCategory && (
-            <div className="row">
-              {sortedProducts.length > 0 ? (
-                sortedProducts.map((product) => (
-                  <div key={product.id} className="col-lg-4 col-md-6 mb-4">
-                    <ProductCard product={product} />
-                  </div>
-                ))
-              ) : (
-                <div className="col-12 text-center py-5">
-                  <h4>No products found</h4>
-                  <p className="text-muted">Try adjusting your filters</p>
-                  <button
-                    className="btn btn-primary"
-                    onClick={clearFilters}
-                  >
-                    Clear All Filters
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Category Description */}
-          {selectedCategory && (
-            <div className="mt-4">
-              <div className="card">
-                <div className="card-body">
-                  <h5>About {selectedCategory}</h5>
-                  <p className="text-muted">
-                    Discover our amazing collection of {selectedCategory.toLowerCase()} items. 
-                    We offer high-quality products from top brands at competitive prices. 
-                    Whether you're looking for casual wear, formal attire, or something in between, 
-                    we have everything you need to express your unique style.
-                  </p>
-                  <div className="row">
-                    <div className="col-md-4">
-                      <h6>Quality Guarantee</h6>
-                      <p className="text-muted small">All our products are carefully selected for quality and durability.</p>
-                    </div>
-                    <div className="col-md-4">
-                      <h6>Free Shipping</h6>
-                      <p className="text-muted small">Free shipping on orders over $50 for {selectedCategory.toLowerCase()} items.</p>
-                    </div>
-                    <div className="col-md-4">
-                      <h6>Easy Returns</h6>
-                      <p className="text-muted small">30-day money-back guarantee on all {selectedCategory.toLowerCase()} products.</p>
-                    </div>
-                  </div>
-                </div>
+              <div className="d-flex gap-3 justify-content-center">
+                <Link href="/products" className="btn btn-primary btn-lg">
+                  <i className="bi bi-search me-2"></i>
+                  Browse All Products
+                </Link>
+                <Link href="/" className="btn btn-outline-primary btn-lg">
+                  <i className="bi bi-house me-2"></i>
+                  Back to Home
+                </Link>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

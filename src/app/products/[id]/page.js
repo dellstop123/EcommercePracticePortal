@@ -1,219 +1,342 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useContext } from 'react';
+import { CartContext } from '@/context/CartContext';
 import { products } from '@/data/products';
-import { useCart } from '@/context/CartContext';
 
-export default function ProductDetailsPage() {
+export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { addToCart } = useCart();
-  const [selectedImage, setSelectedImage] = useState(0);
+  const { addToCart } = useContext(CartContext);
+  const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  const product = products.find(p => p.id === parseInt(params.id));
+  useEffect(() => {
+    const foundProduct = products.find(p => p.id === parseInt(params.id));
+    setProduct(foundProduct);
+    setLoading(false);
+  }, [params.id]);
 
-  if (!product) {
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    const cartItem = {
+      ...product,
+      quantity,
+      selectedSize: selectedSize || null,
+      selectedColor: selectedColor || null
+    };
+    
+    addToCart(cartItem);
+  };
+
+  if (loading) {
     return (
-      <div className="container mt-5 text-center">
-        <h2>Product not found</h2>
-        <p className="text-muted">The product you're looking for doesn't exist.</p>
-        <button 
-          className="btn btn-primary"
-          onClick={() => router.push('/products')}
-        >
-          Back to Products
-        </button>
+      <div className="container mt-5">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
       </div>
     );
   }
 
-  const handleAddToCart = () => {
-    if (selectedSize && selectedColor) {
-      addToCart({
-        ...product,
-        selectedSize,
-        selectedColor,
-        quantity
-      });
-    } else {
-      addToCart({
-        ...product,
-        quantity
-      });
-    }
-  };
+  if (!product) {
+    return (
+      <div className="container mt-5">
+        <div className="row justify-content-center">
+          <div className="col-md-8 text-center">
+            <div className="card shadow-sm">
+              <div className="card-body py-5">
+                <i className="bi bi-exclamation-triangle display-1 text-warning mb-3"></i>
+                <h2 className="mb-3">Product Not Found</h2>
+                <p className="text-muted mb-4">
+                  We couldn&apos;t find the product you&apos;re looking for.
+                </p>
+                <div className="d-flex gap-3 justify-content-center">
+                  <Link href="/products" className="btn btn-primary">
+                    <i className="bi bi-arrow-left me-2"></i>
+                    Back to Products
+                  </Link>
+                  <Link href="/" className="btn btn-outline-primary">
+                    <i className="bi bi-house me-2"></i>
+                    Go Home
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-5">
+      {/* Breadcrumb */}
+      <nav aria-label="breadcrumb" className="mb-4">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
+            <Link href="/" className="text-decoration-none">
+              <i className="bi bi-house me-1"></i>
+              Home
+            </Link>
+          </li>
+          <li className="breadcrumb-item">
+            <Link href="/products" className="text-decoration-none">
+              Products
+            </Link>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            {product.name}
+          </li>
+        </ol>
+      </nav>
+
       <div className="row">
         {/* Product Images */}
         <div className="col-lg-6 mb-4">
-          <div className="position-relative">
-            <img
-              src={product.images[selectedImage]}
-              alt={product.name}
-              className="img-fluid rounded"
-              style={{ width: '100%', height: '500px', objectFit: 'cover' }}
-            />
-            {product.originalPrice && product.originalPrice > product.price && (
-              <div className="position-absolute top-0 start-0 m-3">
-                <span className="badge bg-danger fs-6">
-                  {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
-                </span>
-              </div>
-            )}
+          <div className="card">
+            <div className="card-body p-0">
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={500}
+                height={500}
+                className="img-fluid w-100"
+                style={{ objectFit: 'cover', height: '400px' }}
+              />
+            </div>
           </div>
           
           {/* Thumbnail Images */}
           <div className="row mt-3">
-            {product.images.map((image, index) => (
-              <div key={index} className="col-3 mb-2">
-                <img
-                  src={image}
-                  alt={`${product.name} ${index + 1}`}
-                  className={`img-fluid rounded cursor-pointer ${selectedImage === index ? 'border border-primary' : 'border'}`}
-                  style={{ 
-                    width: '100%', 
-                    height: '80px', 
-                    objectFit: 'cover',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => setSelectedImage(index)}
-                />
-              </div>
-            ))}
+            <div className="col-3">
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={100}
+                height={100}
+                className="img-fluid rounded border"
+                style={{ objectFit: 'cover', height: '80px' }}
+              />
+            </div>
+            <div className="col-3">
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={100}
+                height={100}
+                className="img-fluid rounded border"
+                style={{ objectFit: 'cover', height: '80px' }}
+              />
+            </div>
+            <div className="col-3">
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={100}
+                height={100}
+                className="img-fluid rounded border"
+                style={{ objectFit: 'cover', height: '80px' }}
+              />
+            </div>
+            <div className="col-3">
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={100}
+                height={100}
+                className="img-fluid rounded border"
+                style={{ objectFit: 'cover', height: '80px' }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Product Info */}
+        {/* Product Details */}
         <div className="col-lg-6">
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="/" className="text-decoration-none">Home</a>
-              </li>
-              <li className="breadcrumb-item">
-                <a href="/products" className="text-decoration-none">Products</a>
-              </li>
-              <li className="breadcrumb-item active">{product.name}</li>
-            </ol>
-          </nav>
+          <div className="card">
+            <div className="card-body">
+              <div className="mb-3">
+                <span className="badge bg-primary mb-2">{product.category}</span>
+                <h2 className="fw-bold mb-2">{product.name}</h2>
+                <p className="text-muted mb-2">by {product.brand}</p>
+                <div className="d-flex align-items-center mb-3">
+                  <div className="text-warning me-2">
+                    {[...Array(5)].map((_, i) => (
+                      <i 
+                        key={i} 
+                        className={`bi ${i < Math.floor(product.rating) ? 'bi-star-fill' : 'bi-star'}`}
+                      ></i>
+                    ))}
+                  </div>
+                  <span className="text-muted">({product.rating})</span>
+                </div>
+              </div>
 
-          <h1 className="fw-bold mb-2">{product.name}</h1>
-          <p className="text-muted mb-3">by {product.brand}</p>
+              <div className="mb-4">
+                <div className="d-flex align-items-center mb-2">
+                  <span className="fw-bold text-primary fs-3 me-3">${product.price}</span>
+                  {product.originalPrice && product.originalPrice > product.price && (
+                    <span className="text-muted text-decoration-line-through fs-5">
+                      ${product.originalPrice}
+                    </span>
+                  )}
+                </div>
+                {product.originalPrice && product.originalPrice > product.price && (
+                  <span className="badge bg-success">
+                    Save ${(product.originalPrice - product.price).toFixed(2)}
+                  </span>
+                )}
+              </div>
 
-          {/* Rating */}
-          <div className="d-flex align-items-center mb-3">
-            <div className="d-flex text-warning me-2">
-              {[...Array(5)].map((_, i) => (
-                <i 
-                  key={i} 
-                  className={`bi ${i < Math.floor(product.rating) ? 'bi-star-fill' : 'bi-star'}`}
-                ></i>
-              ))}
-            </div>
-            <span className="text-muted">({product.reviews} reviews)</span>
-          </div>
+              <div className="mb-4">
+                <p className="text-muted">{product.description}</p>
+              </div>
 
-          {/* Price */}
-          <div className="mb-4">
-            <div className="d-flex align-items-center gap-3">
-              <span className="h3 fw-bold text-primary mb-0">${product.price}</span>
-              {product.originalPrice && product.originalPrice > product.price && (
-                <span className="h5 text-muted text-decoration-line-through mb-0">
-                  ${product.originalPrice}
-                </span>
+              {/* Size Selection */}
+              {product.sizes && product.sizes.length > 0 && (
+                <div className="mb-4">
+                  <h6 className="mb-2">Size</h6>
+                  <div className="d-flex gap-2">
+                    {product.sizes.map((size) => (
+                      <button
+                        key={size}
+                        className={`btn btn-outline-secondary ${selectedSize === size ? 'active' : ''}`}
+                        onClick={() => setSelectedSize(size)}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
-            </div>
-          </div>
 
-          {/* Description */}
-          <p className="mb-4">{product.description}</p>
+              {/* Color Selection */}
+              {product.colors && product.colors.length > 0 && (
+                <div className="mb-4">
+                  <h6 className="mb-2">Color</h6>
+                  <div className="d-flex gap-2">
+                    {product.colors.map((color) => (
+                      <button
+                        key={color}
+                        className={`btn btn-outline-secondary ${selectedColor === color ? 'active' : ''}`}
+                        onClick={() => setSelectedColor(color)}
+                      >
+                        {color}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-          {/* Size Selection */}
-          {product.sizes && product.sizes.length > 1 && (
-            <div className="mb-4">
-              <label className="form-label fw-bold">Size</label>
-              <div className="d-flex gap-2 flex-wrap">
-                {product.sizes.map((size) => (
+              {/* Quantity */}
+              <div className="mb-4">
+                <h6 className="mb-2">Quantity</h6>
+                <div className="input-group" style={{ maxWidth: '150px' }}>
                   <button
-                    key={size}
-                    className={`btn ${selectedSize === size ? 'btn-primary' : 'btn-outline-secondary'}`}
-                    onClick={() => setSelectedSize(size)}
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   >
-                    {size}
+                    <i className="bi bi-dash"></i>
                   </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Color Selection */}
-          {product.colors && product.colors.length > 1 && (
-            <div className="mb-4">
-              <label className="form-label fw-bold">Color</label>
-              <div className="d-flex gap-2 flex-wrap">
-                {product.colors.map((color) => (
+                  <input
+                    type="number"
+                    className="form-control text-center"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                    min="1"
+                  />
                   <button
-                    key={color}
-                    className={`btn ${selectedColor === color ? 'btn-primary' : 'btn-outline-secondary'}`}
-                    onClick={() => setSelectedColor(color)}
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setQuantity(quantity + 1)}
                   >
-                    {color}
+                    <i className="bi bi-plus"></i>
                   </button>
-                ))}
+                </div>
               </div>
-            </div>
-          )}
 
-          {/* Quantity */}
-          <div className="mb-4">
-            <label className="form-label fw-bold">Quantity</label>
-            <div className="d-flex align-items-center gap-3">
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              >
-                -
-              </button>
-              <span className="fw-bold">{quantity}</span>
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => setQuantity(quantity + 1)}
-              >
-                +
-              </button>
+              {/* Add to Cart Button */}
+              <div className="d-grid gap-2 mb-4">
+                <button
+                  className="btn btn-primary btn-lg"
+                  onClick={handleAddToCart}
+                >
+                  <i className="bi bi-cart-plus me-2"></i>
+                  Add to Cart - ${(product.price * quantity).toFixed(2)}
+                </button>
+              </div>
+
+              {/* Product Features */}
+              <div className="border-top pt-4">
+                <h6 className="mb-3">Product Features</h6>
+                <ul className="list-unstyled">
+                  <li className="mb-2">
+                    <i className="bi bi-check-circle text-success me-2"></i>
+                    High-quality materials
+                  </li>
+                  <li className="mb-2">
+                    <i className="bi bi-check-circle text-success me-2"></i>
+                    Comfortable fit
+                  </li>
+                  <li className="mb-2">
+                    <i className="bi bi-check-circle text-success me-2"></i>
+                    Durable construction
+                  </li>
+                  <li className="mb-2">
+                    <i className="bi bi-check-circle text-success me-2"></i>
+                    Easy to care for
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Add to Cart Button */}
-          <div className="d-grid gap-2 mb-4">
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={handleAddToCart}
-              disabled={!product.inStock}
-            >
-              {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-            </button>
-          </div>
-
-          {/* Product Details */}
-          <div className="border-top pt-4">
-            <h5 className="fw-bold mb-3">Product Details</h5>
-            <div className="row">
-              <div className="col-6">
-                <p className="mb-2"><strong>Category:</strong> {product.category}</p>
-                <p className="mb-2"><strong>Brand:</strong> {product.brand}</p>
-              </div>
-              <div className="col-6">
-                <p className="mb-2"><strong>Rating:</strong> {product.rating}/5</p>
-                <p className="mb-2"><strong>Reviews:</strong> {product.reviews}</p>
-              </div>
-            </div>
+      {/* Related Products */}
+      <div className="row mt-5">
+        <div className="col-12">
+          <h3 className="mb-4">Related Products</h3>
+          <div className="row">
+            {products
+              .filter(p => p.category === product.category && p.id !== product.id)
+              .slice(0, 4)
+              .map((relatedProduct) => (
+                <div key={relatedProduct.id} className="col-lg-3 col-md-6 mb-4">
+                  <div className="card h-100 product-card shadow-sm">
+                    <Image
+                      src={relatedProduct.image}
+                      alt={relatedProduct.name}
+                      width={300}
+                      height={300}
+                      className="card-img-top"
+                      style={{ objectFit: 'cover', height: '200px' }}
+                    />
+                    <div className="card-body">
+                      <h6 className="card-title">{relatedProduct.name}</h6>
+                      <p className="text-primary fw-bold">${relatedProduct.price}</p>
+                      <button
+                        className="btn btn-outline-primary btn-sm w-100"
+                        onClick={() => router.push(`/products/${relatedProduct.id}`)}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

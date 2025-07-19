@@ -501,7 +501,7 @@ export default function CheckoutPage() {
                       <i className="bi bi-check-circle me-2"></i>
                       <div>
                         <strong>Ready to Place Your Order!</strong>
-                        <p className="mb-0 mt-1">Please review your information above and click "Place Order" to complete your purchase.</p>
+                        <p className="mb-0 mt-1">Please review your information above and click &quot;Place Order&quot; to complete your purchase.</p>
                       </div>
                     </div>
                   </div>

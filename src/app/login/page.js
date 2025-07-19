@@ -148,7 +148,7 @@ export default function LoginPage() {
               <hr className="my-4" />
 
               <div className="text-center">
-                <p className="text-muted mb-3">Don't have an account?</p>
+                <p className="text-muted mb-3">Don&apos;t have an account?</p>
                 <Link href="/signup" className="btn btn-outline-primary">
                   Create Account
                 </Link>

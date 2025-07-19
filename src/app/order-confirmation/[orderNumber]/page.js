@@ -177,7 +177,7 @@ export default function OrderConfirmationPage() {
                       <div className="card-body">
                         <i className="bi bi-envelope text-primary fs-1 mb-3"></i>
                         <h6 className="fw-bold">Order Confirmation</h6>
-                        <small className="text-muted">You'll receive an email confirmation shortly with all order details</small>
+                        <small className="text-muted">You&apos;ll receive an email confirmation shortly with all order details</small>
                       </div>
                     </div>
                   </div>
