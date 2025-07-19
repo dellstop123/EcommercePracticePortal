@@ -4,6 +4,9 @@ import { createContext, useContext, useReducer, useEffect } from 'react';
 
 const CartContext = createContext();
 
+// Export CartContext for direct usage
+export { CartContext };
+
 const cartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TO_CART':

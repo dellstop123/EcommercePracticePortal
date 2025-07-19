@@ -6,7 +6,7 @@ import { CartContext } from '@/context/CartContext';
 import Image from 'next/image';
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateQuantity, getCartTotal } = useContext(CartContext);
+  const { items, removeFromCart, updateQuantity, getCartTotal } = useContext(CartContext);
   const router = useRouter();
 
   const handleQuantityChange = (productId, newQuantity) => {
@@ -17,7 +17,7 @@ export default function CartPage() {
     }
   };
 
-  if (cart.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="container mt-5">
         <div className="row justify-content-center">
@@ -50,11 +50,11 @@ export default function CartPage() {
             <div className="card-header bg-white">
               <h3 className="mb-0">
                 <i className="bi bi-cart me-2"></i>
-                Shopping Cart ({cart.length} items)
+                Shopping Cart ({items.length} items)
               </h3>
             </div>
             <div className="card-body">
-              {cart.map((item) => (
+              {items.map((item) => (
                 <div key={item.id} className="row align-items-center py-3 border-bottom">
                   <div className="col-md-2">
                     <Image
