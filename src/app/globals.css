@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
+
+/* Add your global styles here */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Cart badge positioning */
+.nav-item {
+  position: relative;
+}
+
+/* Floating cart button animations */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.floating-cart-bounce {
+  animation: bounce 2s infinite;
+}
+
+/* Product card hover effects */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Cart notification styles */
+.toast {
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Confirmation Modal Styles */
+.modal.show {
+  display: block !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 1055 !important;
+}
+
+.modal-dialog {
+  z-index: 1056 !important;
+}
+
+.modal-content {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  border: none !important;
+}
+
+.modal-header {
+  border-bottom: 2px solid #28a745 !important;
+}
+
+.modal-footer {
+  border-top: 2px solid #dee2e6 !important;
+}
+
+.modal-footer .btn {
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.modal-footer .btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+}
+
+.modal-footer .btn-success:hover {
+  background-color: #218838 !important;
+  border-color: #1e7e34 !important;
+}
+
+/* Ensure modal is always on top */
+.modal-backdrop {
+  z-index: 1054 !important;
+}
+
+/* Form validation styles */
+.form-control.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.invalid-feedback {
+  display: block !important;
+  color: #dc3545 !important;
+  font-size: 0.875rem !important;
+  margin-top: 0.25rem !important;
+}
+
+/* Confetti Animation - Enhanced */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  animation: confetti-fall 4s linear infinite;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Success Circle Animation */
+.success-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.success-circle {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(45deg, #28a745, #20c997);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: success-pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(40, 167, 69, 0.3);
+}
+
+@keyframes success-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(40, 167, 69, 0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 50px rgba(40, 167, 69, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(40, 167, 69, 0.3);
+  }
+}
+
+/* Order Confirmation Page Styles */
+.order-confirmation-page {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+.success-header {
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  border-radius: 0 0 20px 20px;
+}
+
+.order-summary-card {
+  border: 2px solid #28a745;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.order-item {
+  transition: all 0.3s ease;
+}
+
+.order-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.next-steps-card {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.next-steps-card:hover {
+  border-color: #007bff;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+}
+
+/* Print styles */
+@media print {
+  .confetti-container,
+  .btn,
+  .navbar,
+  .footer {
+    display: none !important;
+  }
+  
+  .card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  
+  .text-success {
+    color: #000 !important;
+  }
+}

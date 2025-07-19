@@ -1,22 +1,31 @@
 {
   "name": "practice-portal",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.0",
-    "bootstrap": "^5.3.3",
-    "react-quill": "^2.0.0"
+    "@chakra-ui/next-js": "^2.4.2",
+    "@chakra-ui/react": "^3.22.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.2.0",
+    "bootstrap": "^5.3.7",
+    "framer-motion": "^12.23.6",
+    "next": "15.4.2",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-router-dom": "^7.7.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^4.4.9"
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.2",
+    "tailwindcss": "^4"
   }
 }
