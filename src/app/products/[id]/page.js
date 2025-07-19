@@ -4,14 +4,13 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useContext } from 'react';
-import { CartContext } from '@/context/CartContext';
+import { useCart } from '@/context/CartContext';
 import { products } from '@/data/products';
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');

@@ -48,7 +48,7 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-5">
             <h2 className="fw-bold">Shop by Category</h2>
-            <p className="text-muted">Find what you're looking for in our organized categories</p>
+            <p className="text-muted">Find what you&apos;re looking for in our organized categories</p>
           </div>
           <div className="row">
             {categories.map((category) => (

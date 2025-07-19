@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function OrderConfirmationPage() {
   const params = useParams();
@@ -34,7 +35,7 @@ export default function OrderConfirmationPage() {
           <i className="bi bi-exclamation-triangle text-warning" style={{ fontSize: '4rem' }}></i>
         </div>
         <h2>Order not found</h2>
-        <p className="text-muted">The order you're looking for doesn't exist.</p>
+        <p className="text-muted">The order you&apos;re looking for doesn&apos;t exist.</p>
         <button 
           className="btn btn-primary"
           onClick={() => router.push('/')}
@@ -137,11 +138,13 @@ export default function OrderConfirmationPage() {
                   {order.items.map((item, index) => (
                     <div key={index} className="row align-items-center py-3 border-bottom mx-0">
                       <div className="col-md-2 text-center">
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
+                          width={80}
+                          height={80}
                           className="img-fluid rounded shadow-sm"
-                          style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                          style={{ objectFit: 'cover' }}
                         />
                       </div>
                       <div className="col-md-5">
@@ -169,7 +172,7 @@ export default function OrderConfirmationPage() {
               <div className="mt-4">
                 <h6 className="fw-bold text-primary mb-3">
                   <i className="bi bi-arrow-right-circle me-2"></i>
-                  What's Next?
+                  What&apos;s Next?
                 </h6>
                 <div className="row">
                   <div className="col-md-4 text-center mb-3">
