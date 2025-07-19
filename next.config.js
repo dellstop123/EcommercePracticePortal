@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
+const repoName = 'EcommercePracticePortal'; // Change to your repo name if different
 const nextConfig = {
+  output: 'export',
+  basePath: `/${repoName}`,
+  assetPrefix: `/${repoName}/`,
   images: {
     remotePatterns: [
       {
@@ -14,7 +18,6 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'via.placeholder.com',
       },
-      // add more patterns as needed
     ],
   },
 };
