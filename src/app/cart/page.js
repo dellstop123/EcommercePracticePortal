@@ -1,12 +1,11 @@
 'use client';
 
-import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { CartContext } from '@/context/CartContext';
+import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 
 export default function CartPage() {
-  const { items, removeFromCart, updateQuantity, getCartTotal } = useContext(CartContext);
+  const { items, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const router = useRouter();
 
   const handleQuantityChange = (productId, newQuantity) => {

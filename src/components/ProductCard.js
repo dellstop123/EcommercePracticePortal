@@ -1,12 +1,11 @@
 'use client';
 
-import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { CartContext } from '@/context/CartContext';
+import { useCart } from '@/context/CartContext';
 
 export default function ProductCard({ product }) {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
   const router = useRouter();
 
   const handleAddToCart = (e) => {
