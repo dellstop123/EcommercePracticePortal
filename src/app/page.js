@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { products, categories } from '@/data/products';
+import Image from 'next/image';
 
 export default function Home() {
   const featuredProducts = products.slice(0, 4);
@@ -29,10 +30,13 @@ export default function Home() {
               </div>
             </div>
             <div className="col-lg-6">
-              <img 
+              <Image 
                 src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop"
                 alt="Fashion Collection"
                 className="img-fluid rounded"
+                width={600}
+                height={400}
+                priority
               />
             </div>
           </div>
